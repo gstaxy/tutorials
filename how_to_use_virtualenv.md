@@ -1,4 +1,4 @@
-# How to use virtualenv with Python
+# How to use virtualenv with Python in Windows
 
 Author: Guillaume Slevan-Tremblay
 
@@ -12,6 +12,7 @@ If you want to verify if it is indeed the case, you can run the commands below i
 ```
 > python --version
 Python 3.6.6
+
 > pip --version
 pip 18.1 from c:\users\<username>\appdata\local\programs\python\python36\lib\site-packages\pip (python 3.6)
 ```
@@ -31,10 +32,11 @@ Windows - In Windows 10, you will often be required to add or modify **Path Envi
 5. On the bottom left, click on **Environment Variables**. This is where the PATH environment variables are located and stored.
 6. Under **System Variables**, select *Path* and click on **Edit**.
 7. From there, you only have to add a new variable with the PATH where Python is installed. It should look like that: ```C:\Users\<username>\AppData\Local\Programs\Python\Python36\Scripts```.
+*Note that this path applies only for Windows and can be different among users.*
 8. Follow the same steps to include pip PATH environment variable.
 
 ## 2. Virtual environments with *virtualenv*
-Once everything is set up on your main local environment, you can start using the [*virtualenv*](https://virtualenv.pypa.io/en/latest/) tool to create your own personalized environments. It is particularly useful to use different package versions in parallel while running different jobs for different projects.
+Once everything is set up on your main local environment, you can start using the [*virtualenv*](https://virtualenv.pypa.io/en/latest/) tool to create your own personalized and isolated environments. It is particularly useful to use different package versions in parallel while running different jobs for different projects.
 
 If you don't have *virtualenv* installed, please do so via pip and test the installation by looking at the version.
 ```
@@ -44,65 +46,85 @@ If you don't have *virtualenv* installed, please do so via pip and test the inst
 16.1.0
 ```
 
-### 1. Creating a virtual environment
+### 2.1 Creating a virtual environment
 To create a virtual environment, navigate to the project directory where you want to place it from the command line and run:
 ```
-> virtualenv env
+> virtualenv venv
 ```
-*env* stands for the environment name. You can name it however you want (e.g. project-env, venv, project-venv), but the convention seem to opt for venv. **NOTE** that it is important to include the path env/ (or however you name your virtual environment) in the .gitignore file of your project in order to not save it on GitHub and potentially create conflict with other users.
+*env* stands for the environment name. You can name it however you want (e.g. project-env, env, project-venv), but most will opt for venv. **NOTE** that it is important to include the path venv/ (or however you name your virtual environment) in the .gitignore file of your project in order to not save it on GitHub and potentially create conflict with other users.
 
-By default, when creating a new virtual environment, the python version used is the default one on your computer. If you want to use another one, let's say python 2.7, you can specify the python version as follows:
+By default, when creating a new virtual environment, the python version used is the default one installed and currently connected on your computer. If you want to use another one, let's say python 2.7, you can specify the python version as follows:
 ```
-> virtualenv env --python=python2.7
+> virtualenv venv --python=python2.7
 ```
 As you can notice here, the command *virtualenv* has been added to the PATH environment variables in order to use it as a command. Go to the steps described in [section 1.2](#1.2-managing-paths) to see how to do.
 
-### 2. Using virtualenv
+### 2.2 Using virtualenv
 Using the virtual environment is somehow different depending on the shell scripting interface you are using. Here are the main possibilities on how to initiate the environment:
 
 On windows CMD, run:
 ```
-> source env\Scripts\activate.bat
+> source venv\Scripts\activate.bat
 ```
 On Windows Powershell, you do not have to write the source command. Just run:
 ```
-> env\Scripts\activate.ps1
+> venv\Scripts\activate.ps1
 ```
 On Linux/Mac, run:
 ```
-$ source env/bin/activate
+$ source venv/bin/activate
 ```
 
 Note that the name of the virtual environment will be visible between parentheses in front of the directory in the command line. Here is an example:
 ```
 # Working locally
 ./user/<username>/<projectdir>/ >
+
 # Using a virtual environment
-(env) ./user/<username>/<projectdir>/ >
+(venv) ./user/<username>/<projectdir>/ >
 ```
 
-### 3. Packages & Requirements
+### 2.3 Packages & Requirements
 Once you have created and activated your virtual environment, you can install all the packages you want using the pip command.
 
 To save a list of installed packages, you can run:
 ```
-(env) ./user/<username>/<projectdir>/ > pip freeze > requirements.txt
+(venv) ./user/<username>/<projectdir>/ > pip freeze > requirements.txt
 ```
 This will save a text file in your directory in order to allow someone else working on the same project to initiate the same environment as yours.
 
-If you just cloned/added an ongoing project that requires the use of a virtual environment, create a virtual environment following steps 1 and 2. Then, install the requirements using this simple command:
+When working on a new project, the requirements can be uploaded in the virtual environment as follows:
 ```
-(env) ./user/<username>/<projectdir>/ > pip install -r requirements.txt
+(venv) ./user/<username>/<projectdir>/ > pip install -r requirements.txt
 ```
+It will possibly be long to install all dependencies at first use, but the environment will be saved in cache to facilitate reload on the following use. From there, more modules can be installed in the environment with pip and saved back in the requirements text file. It is a continuous loop to include in the development process.
 
-### 4. Deactivating
+### 2.4 Deactivating
 Once you have finished working on a project and want to work locally or from another virtual environment, you simply have to deactivate the current virtual environment. All packages and dependencies installed inside this environment will remain the same until you use it again. You can always improve your environment while you use it. Just don't forget to update the requirements.txt file once and a while to keep everything updated.
 
 To deactivate the virtual environment, simply run:
 ```
-(env) ./user/<username>/<projectdir>/ > deactivate
+(venv) ./user/<username>/<projectdir>/ > deactivate
 ```
-The *(env)* in front of your command line should then disappear and you should now be working with your local default environment.
+The *(venv)* annotation in front of your command line should then disappear and you should now be working with your local default environment.
 
-### 5. Deleting
-To delete the virtual environment, just delete the associated folder directory directly in the folder window.
+### 2.5 Deleting
+To delete the virtual environment, just delete the associated folder directory directly in the folder window. In Windows, you can also delete it with the command line directly with ```> rmdir venv```, but make sure you are located in the folder containing the virtual environment main folder.
+
+## 3. Launching a Jupyter Notebook
+Just like in Anaconda, you can launch your own iPython Notebook using the command line. Instead of using the Anaconda package suite already compiled and ready for data science purposes, it will rely on the local pip environment, or the virtual environment set up.
+
+To have more information on which package and environment manager to use (i.e. pip or conda), this [**article**](https://medium.freecodecamp.org/why-you-need-python-environments-and-how-to-manage-them-with-conda-85f155f4353c?gi=f7459170850) covers why Anaconda or Miniconda is also a good choice and compares it to pip.
+
+### 3.1
+In the console, run :
+```
+# Install the package
+> pip install jupyter
+
+# Start a local Jupyter Notebook server
+> jupyter Notebook
+```
+A new browser window should then open on the Jupyter Notebook homepage. This page can also been accessed with an url (localhost:8888/). Note that if you use the numbered url (127.0.0.1:8888), it will require the token printed out in the console interface where the server was first called. It just needs to be copied and entered in the specified cell.
+
+If the jupyter command does not work, verify if it is was added in the environment path variables. If not, follow the steps described in the section [1.2](#Managing-paths).
