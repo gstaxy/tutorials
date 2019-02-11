@@ -85,13 +85,19 @@ Note that the name of the virtual environment will be visible between parenthese
 ```
 
 ### 2.3 Packages & Requirements
-Once you have created and activated your virtual environment, you can install all the packages you want using the pip command.
+Once you have created and activated your virtual environment, you can install all the packages you want using the pip command. 
 
-To save a list of installed packages, you can run:
+The following command will save a text file storing the virtual environment dependencies in your directory in order to allow someone else working on the same project to initiate the same environment as yours. The same is applicable if working on a local environment.
+
+To save a list of installed packages with Windows CMD, you can run:
 ```
 (venv) ./user/<username>/<projectdir>/ > pip freeze > requirements.txt
 ```
-This will save a text file in your directory in order to allow someone else working on the same project to initiate the same environment as yours.
+
+When using Powershell, it is important to specify the encoding in order to have an appropriate and exportable requirements.txt file.
+```
+pip freeze | Out-File -Encoding ASCII requirements.txt
+```
 
 When working on a new project, the requirements can be uploaded in the virtual environment as follows:
 ```
